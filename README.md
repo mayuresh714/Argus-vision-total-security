@@ -27,6 +27,12 @@ service is a design proposal, not yet implemented.
   — **version-0 system design** for the single-camera footage analysis service:
   the sample-every-_k_-seconds loop, components, data model, prompt design,
   tech choices, and failure handling.
+- [`docs/02-hard-questions-strategy-and-answers.md`](./docs/02-hard-questions-strategy-and-answers.md)
+  — **the hard questions**, collected then answered like a founder/engineer
+  building for millions of cameras: speed↔accuracy, false alarms & trust, image
+  vs video, which VLM (Claude/Gemini/GPT vs open-source) and what it really
+  costs per camera, scaling architecture, integrations, revenue model, market
+  size, and the competitive landscape.
 
 ## Core idea in one diagram
 
