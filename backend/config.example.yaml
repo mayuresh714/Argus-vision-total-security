@@ -1,0 +1,48 @@
+# Argus v0 — example configuration.
+# Every tunable knob from the design (docs/01 §4.7) lives here.
+# Copy to config.yaml and adjust. Run: argus --config config.yaml
+
+camera:
+  id: cam-01
+  source: file           # file | rtsp | fake
+  uri: ./sample.mp4      # path (file) or rtsp://user:pass@host/stream (rtsp)
+  sample_interval_seconds: 5.0   # "k": seconds between sampled frames
+
+vlm:
+  backend: openai_compatible     # mock | openai_compatible
+  model: qwen3-vl-8b-instruct
+  endpoint: http://localhost:8000/v1/chat/completions  # vLLM/Ollama/proxy
+  api_key_env: ARGUS_VLM_API_KEY # env var holding the key (never inline it)
+  timeout_seconds: 20.0
+  max_image_long_side: 1024
+
+decision:
+  alert_threshold: 0.70
+  clear_threshold: 0.40          # hysteresis: score must drop below to "clear"
+  cooldown_seconds: 60.0         # suppress repeat alerts for this long
+  consecutive_n: 1               # require N consecutive over-threshold samples
+  review_threshold: 0.40
+  notify_threshold: 0.70
+  urgent_threshold: 0.90
+
+notifiers:
+  - type: console
+  - type: file
+    options:
+      path: ./alerts.jsonl
+  # - type: webhook
+  #   options:
+  #     url: https://example.com/argus/hook
+  #     timeout: 5.0
+
+storage:
+  backend: sqlite                # memory | sqlite
+  path: ./argus.db
+  evidence_dir: ./evidence
+  retention_days: 7
+
+api:
+  host: 0.0.0.0
+  port: 8080
+
+log_level: INFO

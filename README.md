@@ -15,8 +15,17 @@ reason — when it crosses a threshold.
 
 ## Status
 
-Early / foundational. This repo currently holds the founding documents; the v0
-service is a design proposal, not yet implemented.
+Early. The founding documents are in `docs/`, and the **v0 single-camera backend
+is implemented and tested** in `backend/`. The frontend is scaffolded next.
+
+## Repository layout
+
+- [`backend/`](./backend) — the v0 Python service (FastAPI + the sample-every-_k_-seconds
+  pipeline). Runs out of the box with a fake source + mock VLM; point it at a
+  real RTSP/file source and an open-source VLM endpoint via config. `cd backend
+  && pip install -e ".[dev]" && pytest` — see [`backend/README.md`](./backend/README.md).
+- [`frontend/`](./frontend) — operator console + onboarding UI (scaffold; next milestone).
+- [`docs/`](./docs) — problem/scope, system design, and strategy documents.
 
 ## Documentation
 

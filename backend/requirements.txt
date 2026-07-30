@@ -1,0 +1,6 @@
+# Runtime dependencies for the Argus v0 backend.
+# Core pipeline + API. Video sources (OpenCV) are an optional extra — see
+# requirements-video.txt — because the core does not import cv2/numpy.
+pyyaml>=6.0
+fastapi>=0.110
+uvicorn[standard]>=0.27
