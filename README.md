@@ -1,71 +1,73 @@
-# Argus — Vision Total Security
+# 👁️ Argus
 
-> *Argus Panoptes, the hundred-eyed watcher who never slept.*
+**AI security camera monitoring that tells you *why* something looks wrong — not just that it does.**
 
-Argus watches continuous CCTV footage and raises an alert when it sees behaviour
-that looks like **theft or other suspicious activity** — using open-source
-**Vision-Language Models (VLMs)** to reason about what's happening in the frame,
-sampled every _k_ seconds.
+Argus watches your cameras, scores every frame for suspicious behavior, and only pings you when it's actually worth a look — with a plain-language reason attached.
 
-Instead of training a bespoke classifier, the bet is to use pretrained
-open-source VLMs (Qwen3-VL / InternVL3 / Gemma-multimodal class) as a
-**zero-shot reasoning engine**: sample a frame, ask "does this look suspicious,
-and why?", and alert a human — with a confidence score and a plain-language
-reason — when it crosses a threshold.
+🔗 **Live demo:** [argus-vision-total-security.vercel.app](https://argus-vision-total-security.vercel.app)
+Demo login: `operator@argus.demo` / `argus123`
 
-## Status
+---
 
-The web app (with mobile-responsive UI) is implemented: `backend/` (Node/Express +
-Socket.IO REST API and the three-tier scan pipeline) and `frontend/` (React/Vite
-SPA) are kept as separate codebases integrated over HTTP + WebSocket.
+## ✨ Features
+
+- 📊 **Dashboard** — camera status and recent alerts at a glance
+- 📷 **Camera management** — add, pause, tune, or remove cameras
+- 🔴 **Live scan feed** — watch the AI reason about each frame in real time
+- 🚨 **Alerts** — filterable feed with full evidence and escalation trace
+- ✅ **Acknowledge / dismiss** — mark alerts reviewed or false-positive
+- ⚙️ **Per-camera tuning** — sample rate and alert sensitivity, no redeploy needed
+- 📱 **Works on your phone** — same app, responsive from day one
+
+## 🧠 How the AI pipeline works
+
+Most frames are boring. Argus is built around that: cheap checks run constantly, expensive ones only run when something looks off.
+
+```
+Every sampled frame
+      │
+      ▼
+  Tier 1 — fast scan          (runs on every frame)
+      │  unsure?
+      ▼
+  Tier 2 — local AI model     (only runs if Tier 1 is unsure)
+      │  still unsure?
+      ▼
+  Tier 3 — deep analysis      (only runs if Tier 2 is still unsure)
+      │
+      ▼
+  Alert, with a reason
+```
+
+Tier 2 and Tier 3 are pluggable — point them at your own model server (local or cloud) and the pipeline uses it automatically. Without one configured, Argus falls back to a built-in simulator so the whole app works out of the box.
+
+## 🛠️ Stack
+
+| | |
+|---|---|
+| **Frontend** | React + Vite, deployed on Vercel |
+| **Backend** | Node.js + Express + Socket.IO, deployed on Render |
+| **Realtime** | WebSockets — alerts and scan events push live, no polling |
+
+Frontend and backend are separate codebases that talk over REST + WebSocket — swap either one out independently.
+
+## 🚀 Run it locally
 
 ```bash
-cd backend && npm install && cp .env.example .env && npm run dev   # :4000
-cd frontend && npm install && npm run dev                          # :5173
+# backend
+cd backend && npm install && cp .env.example .env && npm run dev   # → :4000
+
+# frontend (new terminal)
+cd frontend && npm install && npm run dev                          # → :5173
 ```
 
-Demo login: `operator@argus.demo` / `argus123`. See `backend/README.md` and
-`frontend/README.md` for details, including how the three-tier
-fast-scan → local-VLM → sophisticated-model escalation pipeline is wired and
-how to point it at real on-device models.
+Open `http://localhost:5173` and log in with the demo account above.
 
-## Documentation
-
-- [`docs/00-problem-and-scope.md`](./docs/00-problem-and-scope.md) — **the
-  founding document**: problem, scope, goals/non-goals, the VLM approach,
-  success metrics, ethics & privacy, risks, and roadmap.
-- [`docs/01-system-design-v0-single-camera.md`](./docs/01-system-design-v0-single-camera.md)
-  — **version-0 system design** for the single-camera footage analysis service:
-  the sample-every-_k_-seconds loop, components, data model, prompt design,
-  tech choices, and failure handling.
-- [`docs/02-hard-questions-strategy-and-answers.md`](./docs/02-hard-questions-strategy-and-answers.md)
-  — **the hard questions**, collected then answered like a founder/engineer
-  building for millions of cameras: speed↔accuracy, false alarms & trust, image
-  vs video, which VLM (Claude/Gemini/GPT vs open-source) and what it really
-  costs per camera, scaling architecture, integrations, revenue model, market
-  size, and the competitive landscape.
-
-## Core idea in one diagram
+## 📂 Structure
 
 ```
-CCTV feed ──► sample 1 frame / k seconds ──► VLM("is this suspicious? why?")
-                                                  │
-                                                  ▼
-                                     structured {score, reason, tags}
-                                                  │
-                                                  ▼
-                              threshold + debounce ──► alert + saved clip
+backend/    Express API + Socket.IO + the scan pipeline
+frontend/   React app (web + mobile-responsive)
 ```
 
-## Principles
-
-- **Human-in-the-loop** — Argus alerts a person; it never accuses, detains, or
-  acts autonomously.
-- **Behaviour, not identity** — no face recognition or re-identification.
-- **Honest & tunable** — every alert carries a confidence and a reason;
-  thresholds and the sampling interval _k_ are configurable.
-- **Open models, commodity hardware** — no dependency on a paid frontier API to
-  function.
-
-See the [foundation doc](./docs/00-problem-and-scope.md) for the full ethics,
-privacy, and scope discussion.
+See `backend/README.md` and `frontend/README.md` for details on each side.
