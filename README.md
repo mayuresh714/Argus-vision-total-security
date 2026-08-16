@@ -15,8 +15,19 @@ reason — when it crosses a threshold.
 
 ## Status
 
-Early / foundational. This repo currently holds the founding documents; the v0
-service is a design proposal, not yet implemented.
+The web app (with mobile-responsive UI) is implemented: `backend/` (Node/Express +
+Socket.IO REST API and the three-tier scan pipeline) and `frontend/` (React/Vite
+SPA) are kept as separate codebases integrated over HTTP + WebSocket.
+
+```bash
+cd backend && npm install && cp .env.example .env && npm run dev   # :4000
+cd frontend && npm install && npm run dev                          # :5173
+```
+
+Demo login: `operator@argus.demo` / `argus123`. See `backend/README.md` and
+`frontend/README.md` for details, including how the three-tier
+fast-scan → local-VLM → sophisticated-model escalation pipeline is wired and
+how to point it at real on-device models.
 
 ## Documentation
 
