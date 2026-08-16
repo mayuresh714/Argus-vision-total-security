@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import { useAuth } from './AuthContext.jsx';
+import { API_ROOT } from '../api/client.js';
 
 const SocketContext = createContext(null);
 
@@ -13,7 +14,7 @@ export function SocketProvider({ children }) {
 
   useEffect(() => {
     if (!user) return undefined;
-    const socket = io('/', { path: '/socket.io' });
+    const socket = API_ROOT ? io(API_ROOT) : io('/', { path: '/socket.io' });
     socketRef.current = socket;
 
     socket.on('connect', () => setConnected(true));

@@ -1,4 +1,5 @@
-const BASE = '/api';
+const API_ROOT = import.meta.env.VITE_API_URL || '';
+const BASE = `${API_ROOT}/api`;
 
 function getToken() {
   return localStorage.getItem('argus_token');
@@ -51,4 +52,4 @@ export function clearToken() {
   localStorage.removeItem('argus_token');
 }
 
-export { getToken };
+export { getToken, API_ROOT };
