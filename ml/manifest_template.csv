@@ -1,0 +1,3 @@
+video_path,label,site_id,event_start,event_end,source,license
+clips/a.mp4,theft,shopA,12.0,31.5,youtube:ID,unknown
+clips/b.mp4,normal,shopA,,,own-pilot,owned

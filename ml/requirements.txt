@@ -1,0 +1,8 @@
+numpy
+scikit-learn
+opencv-python-headless
+matplotlib
+# only needed for the real V-JEPA 2 encoder (run on a GPU machine / Colab)
+# torch
+# transformers>=4.53
+pytest

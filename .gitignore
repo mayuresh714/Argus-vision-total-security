@@ -3,3 +3,8 @@ dist/
 .env
 *.log
 .DS_Store
+ml/data/
+ml/cache/
+ml/reports/
+__pycache__/
+.pytest_cache/
